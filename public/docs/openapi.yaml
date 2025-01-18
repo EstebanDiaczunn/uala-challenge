@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/v1/users:
+    post:
+      summary: 'Create a new user'
+      operationId: createANewUser
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User created successfully'
+                  user:
+                    id: 550e8400-e29b-41d4-a716-446655440000
+                    username: johndoe
+                    display_name: 'John Doe'
+                    created_at: '2024-01-17T12:00:00+00:00'
+                    updated_at: '2024-01-17T12:00:00+00:00'
+                properties:
+                  message:
+                    type: string
+                    example: 'User created successfully'
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 550e8400-e29b-41d4-a716-446655440000
+                      username:
+                        type: string
+                        example: johndoe
+                      display_name:
+                        type: string
+                        example: 'John Doe'
+                      created_at:
+                        type: string
+                        example: '2024-01-17T12:00:00+00:00'
+                      updated_at:
+                        type: string
+                        example: '2024-01-17T12:00:00+00:00'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    username:
+                      - 'The username has already been taken.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      username:
+                        type: array
+                        example:
+                          - 'The username has already been taken.'
+                        items:
+                          type: string
+      tags:
+        - 'User Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 'The username of the user.'
+                  example: johndoe
+                  nullable: false
+                display_name:
+                  type: string
+                  description: 'The display name of the user.'
+                  example: 'John Doe'
+                  nullable: true
+              required:
+                - username
+      security: []
+tags:
+  -
+    name: 'User Management'
+    description: ''
