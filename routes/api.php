@@ -19,9 +19,13 @@ Route::prefix('v1')->group(function () {
     // Rutas públicas para gestión de usuarios
     Route::post('/users', [UserController::class, 'store']);
 
+    // Rutas User privadas
     Route::middleware('header-auth')->group(function () {
+        Route::get('/users/search', [UserController::class, 'search']);
         Route::get('/users/{id}', [UserController::class, 'show']);
-        Route::put('/users/{id}', [UserController::class, 'update']);
-        Route::delete('/users/{id}', [UserController::class, 'destroy']);
+        //Route::put('/users/{id}', [UserController::class, 'update']);
+        //Route::delete('/users/{id}', [UserController::class, 'destroy']);
+        Route::post('/users/{target_user_id}/follow', [UserController::class, 'follow']);
+        Route::delete('/users/{target_user_id}/unfollow', [UserController::class, 'unfollow']);
     });
 });

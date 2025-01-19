@@ -55,13 +55,18 @@ La aplicación está dividida en tres contextos principales:
 - Cada contexto acotado (bounded context) mantiene su propia lógica de negocio
 
 #### Autenticación
-- Sistema simplificado basado en user_id via header
+- Sistema simplificado basado en user_id via header simula token
 - Sin gestión de sesiones
 
 #### Escalabilidad
 - Diseño orientado a microservicios para facilitar escalado horizontal
 - Uso de cache distribuido para optimizar lecturas
 - Procesamiento asíncrono para tareas pesadas
+
+### Optimizaciones
+- Contadores en caché para followers/following
+- Timelines pre-calculados en Redis
+- Procesamiento asíncrono para escrituras pesadas
 
 ### Estructura de Carpetas
 ```plaintext

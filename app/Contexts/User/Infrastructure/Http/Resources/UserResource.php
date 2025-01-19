@@ -12,8 +12,10 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'username' => $this->username,
             'display_name' => $this->display_name,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'stats' => [
+                'followers_count' => $this->stats['followers_count'] ?? null,
+                'following_count' => $this->stats['following_count'] ?? null,
+            ],
         ];
     }
 }

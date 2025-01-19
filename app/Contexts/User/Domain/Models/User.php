@@ -2,19 +2,28 @@
 
 namespace App\Contexts\User\Domain\Models;
 
+use App\Contexts\User\Infrastructure\Persistence\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    use HasFactory;
+
     protected $keyType = 'string';
 
     public $incrementing = false;
 
     protected $fillable = [
         'username',
-        'display_name'
+        'display_name',
     ];
 
+    /**
+     * Get the users that are following this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function followers()
     {
         return $this->belongsToMany(
@@ -22,7 +31,7 @@ class User extends Model
             'follows',
             'followed_id',
             'follower_id'
-        )->withTimestamps();
+        );
     }
 
     public function following()
@@ -32,6 +41,11 @@ class User extends Model
             'follows',
             'follower_id',
             'followed_id'
-        )->withTimestamps();
+        );
+    }
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
     }
 }
