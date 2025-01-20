@@ -33,7 +33,7 @@ Este proyecto implementa una plataforma de microblogging siguiendo los principio
 - docker-compose exec app php artisan migrate
 
 ## Para inciar el consumidor de Rabbit en una nueva terminal
-php artisan timeline:consume
+docker-compose exec app php artisan timeline:consume
 
 ### Bounded Contexts
 La aplicación está dividida en tres contextos principales:
