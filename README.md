@@ -65,6 +65,11 @@ La aplicación está dividida en tres contextos principales:
    - Cache de timelines y datos frecuentemente accedidos
    - Optimización de lecturas y reducción de carga en PostgreSQL
 
+3. Mongodb / DynamoDB
+   - Base de datos para tweets y timeline
+   - Puertos: 27017:27017
+   - Autenticación configurada por defecto
+
 ### Message Broker
 RabbitMQ maneja la distribución asíncrona de tweets:
 1. Usuario publica tweet → MongoDB
