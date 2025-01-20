@@ -17,17 +17,17 @@ Este proyecto implementa una plataforma de microblogging siguiendo los principio
 ## Configuración del entorno
 
 1. **Clonar el repositorio**
-git clone <repositorio>
-cd twitter-clone
+- git clone <repositorio>
+- cd twitter-clone
 
-cp .env.example .env
-composer install
+- cp .env.example .env
+- composer install
 
-php artisan migrate
+- php artisan migrate
 
-docker-compose up -d
+- docker-compose up -d
 
-## Para inciar el consumidor de Rabbit en una nueva terminal :
+## Para inciar el consumidor de Rabbit en una nueva terminal
 php artisan timeline:consume
 
 ### Bounded Contexts
@@ -82,6 +82,9 @@ http://localhost:8000/api/documentation
 #### Arquitectura
 - DDD con vertical slicing para mejor organización y mantenibilidad
 - Cada contexto acotado (bounded context) mantiene su propia lógica de negocio
+- Command Query Responsibility Segregation (CQRS)
+- Event-Driven (TweetCreatedEvent) --> RabbitMQ --> handler in api
+- Repository pattern
 
 #### Autenticación
 - Sistema simplificado basado en user_id via header simula token
