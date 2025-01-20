@@ -1,0 +1,5 @@
+##La verdad es que podría ser millones de veces mejor con las características que se me fueron ocurriendo.
+##Con muchísima más información por recurso: likes, bloqueos de usuarios, retweets, conteo de estos, procesamiento con IA para tweets o imágenes, etc.
+##Me quedé muy ajustado con el tiempo, no porque hayan dado poco.
+
+##Me gusto mucho esta arquitectura y tambien fui aprendiendo bastante a medido que lo desarrollaba, perdon los commits

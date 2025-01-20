@@ -169,6 +169,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Contexts\User\Infrastructure\Providers\UserServiceProvider::class,
+        App\Contexts\Tweet\Infrastructure\Providers\TweetServiceProvider::class,
+        App\Contexts\Timeline\Infrastructure\Providers\TimelineServiceProvider::class,
+        App\Providers\MongoDBServiceProvider::class,
     ])->toArray(),
 
     /*

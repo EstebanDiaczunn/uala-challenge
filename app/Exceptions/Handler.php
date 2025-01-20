@@ -20,15 +20,24 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     */
-    public function register()
+    public function render($request, Throwable $e): JsonResponse|Response
     {
-        $this->renderable(function (Throwable $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], $e->getCode());
-        });
+        if ($e instanceof \DomainException) {
+            // Use a default HTTP status code if getCode() returns 0
+            $statusCode = $e->getCode() ?: Response::HTTP_BAD_REQUEST;
+
+            return new JsonResponse([
+                'error' => $e->getMessage(),
+            ], $statusCode);
+        }
+
+        return parent::render($request, $e);
     }
+
+    public function register(): void
+    {
+        // Remove this since we're handling it in render()
+        // The register method can be used for other exception handling setup
+    }
+
 }

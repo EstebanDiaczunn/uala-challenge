@@ -16,7 +16,7 @@ class FollowUserDTO
     {
         return new self(
             followerId: $request->user->id ?? $request->header('X-User-ID') ?? throw new \InvalidArgumentException('User ID not provided', 404),
-            targetUserId: $request->get('target_user_id')
+            targetUserId: $request->input('target_user_id')
         );
     }
 }

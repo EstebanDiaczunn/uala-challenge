@@ -18,7 +18,6 @@ use App\Contexts\User\Infrastructure\Http\Requests\UnfollowUserRequest;
 use App\Contexts\User\Infrastructure\Http\Resources\UserResource;
 use App\Shared\Infraestructure\Http\Controllers\ApiController;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Foundation\Http\FormRequest as Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends ApiController

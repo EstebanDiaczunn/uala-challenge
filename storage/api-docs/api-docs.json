@@ -1,0 +1,741 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": " uala twitter-like API",
+        "description": "Documentación de la API generada con Swagger/OpenAPI",
+        "contact": {
+            "email": "estebandiaczun@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/timeline": {
+            "get": {
+                "tags": [
+                    "Timeline"
+                ],
+                "summary": "Obtener el timeline del usuario",
+                "description": "Obtiene los tweets más recientes de los usuarios seguidos, ordenados cronológicamente. El timeline se actualiza en tiempo real cuando los usuarios que sigues publican nuevos tweets.",
+                "operationId": "getTimeline",
+                "parameters": [
+                    {
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "description": "ID del usuario autenticado, enviado como encabezado",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página para la paginación. El valor predeterminado es 1.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Cantidad de tweets por página. El valor predeterminado es 20.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 20
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Timeline obtenido exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "tweet_id": {
+                                                        "type": "string",
+                                                        "example": "507f1f77bcf86cd799439011"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "string",
+                                                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "¡Este es mi nuevo tweet!"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-01-20T06:12:27+00:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 45
+                                                },
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario no autenticado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "X-User-ID": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/tweets": {
+            "post": {
+                "tags": [
+                    "Tweet Management"
+                ],
+                "summary": "Crear un nuevo tweet",
+                "description": "Crea un nuevo tweet y lo publica en la plataforma.",
+                "operationId": "3afba6cd46b6807beeaa7d75b2852b15",
+                "parameters": [
+                    {
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "description": "ID del usuario autenticado, enviado como encabezado",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "description": "Contenido del tweet (máximo 280 caracteres)",
+                                        "type": "string",
+                                        "example": "¡Este es mi primer tweet!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tweet creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tweet created successfully"
+                                        },
+                                        "id": {
+                                            "type": "string",
+                                            "example": "507f1f77bcf86cd799439011"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "content": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El contenido del tweet no puede exceder los 280 caracteres."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario no autenticado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "user_id_header": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Crear un nuevo usuario",
+                "description": "Crea un nueevo usuario y devuelve su información.",
+                "operationId": "ff67e6b5ba3334edbe90020b702bd441",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "johndoe"
+                                    },
+                                    "display_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "johndoe"
+                                                },
+                                                "display_name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "username": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The username has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Obtener información de un usuario",
+                "description": "Este endpoint permite obtener la información de un usuario especificado mediante su ID. Se requiere pasar un encabezado `X-User-ID` con el ID del usuario autenticado como token.",
+                "operationId": "getUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario que se desea obtener",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "description": "ID del usuario autenticado, enviado como encabezado",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información del usuario obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "123e4567-e89b-12d3-a456-426614174000"
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "example": "johndoe"
+                                        },
+                                        "display_name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "stats": {
+                                            "properties": {
+                                                "followers_count": {
+                                                    "type": "integer",
+                                                    "example": 150
+                                                },
+                                                "following_count": {
+                                                    "type": "integer",
+                                                    "example": 100
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid request."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{targetUserId}/follow": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Seguir a un usuario",
+                "description": "Permite que el usuario autenticado siga a otro usuario. El sistema actualiza los contadores de seguidores tanto en la base de datos como en caché.",
+                "operationId": "followUser",
+                "parameters": [
+                    {
+                        "name": "targetUserId",
+                        "in": "path",
+                        "description": "ID del usuario a seguir",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "description": "ID del usuario autenticado, enviado como encabezado",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario seguido exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User followed successfully"
+                                        },
+                                        "stats": {
+                                            "properties": {
+                                                "followers_count": {
+                                                    "type": "integer",
+                                                    "example": 42
+                                                },
+                                                "following_count": {
+                                                    "type": "integer",
+                                                    "example": 23
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    },
+                    "400": {
+                        "description": "No se puede seguir al mismo usuario"
+                    }
+                },
+                "security": [
+                    {
+                        "X-User-ID": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{targetUserId}/unfollow": {
+            "delete": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Dejar de seguir a un usuario",
+                "description": "Permite que el usuario autenticado deje de seguir a otro usuario. El sistema actualiza los contadores de seguidores tanto en la base de datos como en caché.",
+                "operationId": "unfollowUser",
+                "parameters": [
+                    {
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "description": "ID del usuario autenticado, enviado como encabezado",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "targetUserId",
+                        "in": "path",
+                        "description": "ID del usuario a dejar de seguir",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario dejado de seguir exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User unfollowed successfully"
+                                        },
+                                        "stats": {
+                                            "properties": {
+                                                "followers_count": {
+                                                    "type": "integer",
+                                                    "example": 41
+                                                },
+                                                "following_count": {
+                                                    "type": "integer",
+                                                    "example": 22
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    },
+                    "400": {
+                        "description": "Errores de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cannot unfollow yourself."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "User is not being followed."
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "X-User-ID": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/search": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Buscar usuarios por nombre de usuario",
+                "description": "Este endpoint permite buscar usuarios cuyo nombre de usuario coincida parcialmente con el valor proporcionado. Soporta paginación mediante el parámetro `per_page`.",
+                "operationId": "searchUsers",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "El nombre de usuario o parte de él para buscar.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "john"
+                        }
+                    },
+                    {
+                        "name": "X-User-ID",
+                        "in": "header",
+                        "description": "ID del usuario autenticado, enviado como encabezado",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Cantidad de resultados por página. El valor predeterminado es 10.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "format": "uuid",
+                                                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "johndoe"
+                                                    },
+                                                    "display_name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "followers_count": {
+                                                        "type": "integer",
+                                                        "example": 150
+                                                    },
+                                                    "following_count": {
+                                                        "type": "integer",
+                                                        "example": 100
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 25
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid request."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "X-User-ID": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Timeline",
+            "description": "Timeline"
+        },
+        {
+            "name": "Tweet Management",
+            "description": "Tweet Management"
+        },
+        {
+            "name": "User Management",
+            "description": "User Management"
+        }
+    ]
+}

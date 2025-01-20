@@ -64,4 +64,9 @@ class EloquentUserRepository implements UserRepositoryInterface
     {
         User::find($followerId)->following()->detach($targetUserId);
     }
+
+    public function getFollowers(string $userId): Collection
+    {
+        return User::find($userId)->followers()->get();
+    }
 }

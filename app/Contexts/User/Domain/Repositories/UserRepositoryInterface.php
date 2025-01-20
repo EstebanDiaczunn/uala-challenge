@@ -20,4 +20,6 @@ interface UserRepositoryInterface
     public function removeFollower(string $followerId, string $targetUserId): void;
     public function isAlreadyFollowing(string $followerId, string $targetUserId): bool;
     public function isNotFollowing(string $followerId, string $targetUserId): bool;
+
+    public function getFollowers(string $userId): Collection;
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Contexts\Timeline\Infrastructure\Http\Controllers\TimelineController;
+use App\Contexts\Tweet\Infrastructure\Http\Controller\TweetController;
 use App\Contexts\User\Infrastructure\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +29,15 @@ Route::prefix('v1')->group(function () {
         //Route::delete('/users/{id}', [UserController::class, 'destroy']);
         Route::post('/users/{target_user_id}/follow', [UserController::class, 'follow']);
         Route::delete('/users/{target_user_id}/unfollow', [UserController::class, 'unfollow']);
+    });
+
+    //Rutas Tweet privadas
+    Route::middleware('header-auth')->group(function () {
+        Route::post('/tweets', [TweetController::class, 'store']);
+    });
+
+    //Rutas timeline privadas
+    Route::middleware('header-auth')->group(function () {
+        Route::get('/timeline', [TimelineController::class, 'index']);
     });
 });

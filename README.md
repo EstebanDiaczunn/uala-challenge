@@ -5,6 +5,31 @@
 ### Visión General
 Este proyecto implementa una plataforma de microblogging siguiendo los principios de Domain-Driven Design (DDD) con vertical slicing. La arquitectura está diseñada para escalar a millones de usuarios, con especial énfasis y obvia necesidad en la optimización de lecturas.
 
+## Requisitos previos
+- Docker y Docker Compose
+- PHP 8.1+
+- Composer
+- 4GB RAM mínimo recomendado
+- PostgreSQL
+- MongoDB
+- RabbitMQ
+
+## Configuración del entorno
+
+1. **Clonar el repositorio**
+git clone <repositorio>
+cd twitter-clone
+
+cp .env.example .env
+composer install
+
+php artisan migrate
+
+docker-compose up -d
+
+## Para inciar el consumidor de Rabbit en una nueva terminal :
+php artisan timeline:consume
+
 ### Bounded Contexts
 La aplicación está dividida en tres contextos principales:
 
@@ -35,13 +60,17 @@ La aplicación está dividida en tres contextos principales:
    - Cache de timelines y datos frecuentemente accedidos
    - Optimización de lecturas y reducción de carga en PostgreSQL
 
-#### Message Broker
-- RabbitMQ para comunicación asíncrona entre servicios
-- Manejo eficiente de la distribución de tweets a timelines
+### Message Broker
+RabbitMQ maneja la distribución asíncrona de tweets:
+1. Usuario publica tweet → MongoDB
+2. Evento enviado a RabbitMQ
+3. Servicio de Timeline procesa y distribuye a seguidores
+4. Timelines actualizados en Redis#### Message Broker
+
 
 #### Documentación API
-- Scribe para generación automática de documentación
-- Facilita el mantenimiento y prueba de endpoints
+Para documentación detallada de la API, visitar:
+http://localhost:8000/api/documentation
 
 #### Swagger/OpenAPI
 - Integrado para documentar la API con una interfaz más profesional y atractiva.

@@ -15,7 +15,6 @@ CREATE TABLE follows (
 
 -- Índices para optimizar búsquedas
 CREATE UNIQUE INDEX idx_users_id ON users (id);
-
 CREATE INDEX idx_users_username ON users(username);
 CREATE INDEX idx_follows_follower ON follows(follower_id);
 CREATE INDEX idx_follows_followed ON follows(followed_id);
