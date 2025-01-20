@@ -1,24 +1,63 @@
 version: '3.8'
-
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGODB_DATABASE=uala-mgo
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
     networks:
       - app-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: uala
+      POSTGRES_USER: uala
+      POSTGRES_PASSWORD: uala123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: uala-mgo
+      MONGO_INITDB_ROOT_USERNAME: uala
+      MONGO_INITDB_ROOT_PASSWORD: uala123
+    ports:
+      - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
     ports:
-      - "5672:5672" # Puerto para la aplicación
-      - "15672:15672" # Puerto para el panel de administración
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
     networks:
       - app-network
 
@@ -27,4 +66,5 @@ networks:
     driver: bridge
 
 volumes:
+  postgres_data:
   mongodb_data:

@@ -18,14 +18,19 @@ Este proyecto implementa una plataforma de microblogging siguiendo los principio
 
 1. **Clonar el repositorio**
 - git clone <repositorio>
-- cd twitter-clone
+- cd uala-challenge
 
 - cp .env.example .env
+- configurar el .env
 - composer install
 
-- php artisan migrate
+- docker-compose up -d --build
 
-- docker-compose up -d
+- docker-compose exec app composer install
+
+- docker-compose exec app php artisan key:generate 
+
+- docker-compose exec app php artisan migrate
 
 ## Para inciar el consumidor de Rabbit en una nueva terminal
 php artisan timeline:consume

@@ -12,27 +12,22 @@ class MongoDBServiceProvider extends ServiceProvider
         $this->app->singleton(Client::class, function ($app) {
             $config = config('mongodb');
 
+            // Construimos una URI completa con credenciales y parámetros de autenticación
             $uri = sprintf(
-                'mongodb://%s:%s',
-                $config['host'],
-                $config['port']
+                'mongodb://%s:%s@%s:%s/%s?authSource=admin',
+                $config['username'],        // Usuario de MongoDB
+                $config['password'],        // Contraseña
+                $config['host'],            // Host (nombre del servicio en Docker)
+                $config['port'],            // Puerto
+                $config['database']         // Nombre de la base de datos
             );
 
-            return new Client($uri);
+            // Creamos el cliente con opciones adicionales de seguridad
+            return new Client($uri, [
+                'authSource' => 'admin',
+                'retryWrites' => true,
+                'w' => 'majority'
+            ]);
         });
-    }
-
-    public function boot()
-    {
-        if ($this->app->environment() !== 'testing') {
-            $client = $this->app->make(Client::class);
-            $db = $client->selectDatabase(config('mongodb.database'));
-
-            // Configurar índices para tweets
-            $tweetsCollection = $db->selectCollection('tweets');
-            foreach (config('mongodb.collections.tweets.indexes') as $index) {
-                $tweetsCollection->createIndex($index['key']);
-            }
-        }
     }
 }
